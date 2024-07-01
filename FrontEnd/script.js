@@ -1,114 +1,117 @@
 const apiUrl = "http://localhost:5678/api/works";
-fetch(apiUrl)
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("Erreur de réseau ou de serveur: " + response.statusText);
-    }
-    return response.json();
-  })
-  .then(data => {
-    console.log('OK');
-    projectsData = data;
-  })
-  .catch(error => {
-    console.error("Erreur lors de la récupération des données:", error);
+let projectsData = [];
+
+//Function pour récuperer des données de l'API
+function fetchData() {
+  return fetch(apiUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Erreur de réseau ou de serveur: " + response.statusText);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Données chargées depuis API');
+      projectsData = data;
+      return data;
+    })
+    .catch(error => {
+      console.error("Erreur lors de la récupération des données:", error);
+      throw error;
+    });
+}
+// Fonction pour afficher les projets
+function displayImages() {
+  const gallery = document.querySelector('.gallery');
+  if (gallery) {
+    gallery.innerHTML = '';
+
+    projectsData.forEach(project => {
+      const figure = document.createElement('figure');
+      const img = document.createElement('img');
+      img.src = project.imageUrl;
+      const figCaption = document.createElement('figcaption');
+      figCaption.textContent = project.title;
+      figure.appendChild(img);
+      figure.appendChild(figCaption);
+      gallery.appendChild(figure);
+    });
+  } else {
+    console.error("Elément avec la classe 'gallery' n'est pas trouvé");
+  }
+}
+// Objet Set
+const uniqueCategories = new Set();
+
+//Fonction de déclenchement des boutons de filtre
+function initialize() {
+  const btnAll = document.getElementById("btnAll");
+  const btnObjects = document.getElementById("btnObjects");
+  const btnApartments = document.getElementById("btnApartments");
+  const btnHotels = document.getElementById("btnHotels");
+
+  if (!btnAll || !btnObjects || !btnApartments || !btnHotels) {
+    console.error("One or more filter buttons are missing");
+    return;
+  }
+
+  //Changement de couleur du bouton lors du clic
+  function handleButtonClick(button, categoryId) {
+    [btnAll, btnObjects, btnApartments, btnHotels].forEach(btn => btn.classList.remove('active'));
+    button.classList.add('active');
+    filterImages(categoryId);
+  }
+
+  btnAll.addEventListener("click", function () {
+    handleButtonClick(btnAll, 'all');
   });
 
+  btnObjects.addEventListener("click", function () {
+    handleButtonClick(btnObjects, 1);
+  });
 
-const savedProjects = localStorage.getItem('projectsData');
-let projectsData = savedProjects ? JSON.parse(savedProjects) : [
-  { id: 1, imageUrl: 'http://localhost:5678/images/abajour-tahina1651286843956.png', title: 'Abajour Tahina', categoryId: '1' },
-  { id: 2, imageUrl: 'http://localhost:5678/images/appartement-paris-v1651287270508.png', title: 'Appartement Paris V', categoryId: '2' },
-  { id: 3, imageUrl: 'http://localhost:5678/images/restaurant-sushisen-londres1651287319271.png', title: 'Restaurant Sushisen - Londres', categoryId: '3' },
-  { id: 4, imageUrl: 'http://localhost:5678/images/la-balisiere1651287350102.png', title: 'Villa “La Balisiere” - Port Louis', categoryId: '2' },
-  { id: 5, imageUrl: 'http://localhost:5678/images/structures-thermopolis1651287380258.png', title: 'Structures Thermopolis', categoryId: '1' },
-  { id: 6, imageUrl: 'http://localhost:5678/images/appartement-paris-x1651287435459.png', title: 'Appartement Paris X', categoryId: '2' },
-  { id: 7, imageUrl: 'http://localhost:5678/images/le-coteau-cassis1651287469876.png', title: 'Pavillon “Le coteau” - Cassis', categoryId: '2' },
-  { id: 8, imageUrl: 'http://localhost:5678/images/villa-ferneze1651287511604.png', title: 'Villa Ferneze - Isola d’Elba', categoryId: '2' },
-  { id: 9, imageUrl: 'http://localhost:5678/images/appartement-paris-xviii1651287541053.png', title: 'Appartement Paris XVIII', categoryId: '2' },
-  { id: 10, imageUrl: 'http://localhost:5678/images/bar-lullaby-paris1651287567130.png', title: 'Bar “Lullaby” - Paris', categoryId: '3' },
-  { id: 11, imageUrl: 'http://localhost:5678/images/hotel-first-arte-new-delhi1651287605585.png', title: 'Hotel First Arte - New Delhi', categoryId: '3' },
-];
+  btnApartments.addEventListener("click", function () {
+    handleButtonClick(btnApartments, 2);
+  });
 
-//Filtration des projets par catégorie choisie
-document.addEventListener("DOMContentLoaded", function () {
-  var btnAll = document.getElementById("btnAll");
-  var btnObjects = document.getElementById("btnObjects");
-  var btnApartments = document.getElementById("btnApartments");
-  var btnHotels = document.getElementById("btnHotels");
-
-  function handleButtonClick(button, categoryId) {
-    // Удаление класса active у всех кнопок
-    [btnAll, btnObjects, btnApartments, btnHotels].forEach(btn => btn.classList.remove('active'));
-
-    // Добавление класса active к нажатой кнопке
-    button.classList.add('active');
-
-    // Фильтрация изображений по выбранной категории
-    filterImages(categoryId);
+  btnHotels.addEventListener("click", function () {
+    handleButtonClick(btnHotels, 3);
+  });
 }
 
-  if (btnAll) {
-      btnAll.addEventListener("click", function() {
-          filterImages('all');
-          handleButtonClick(btnAll, 'all');
-      });
+// Filration de projets
+function filterImages(categoryId) {
+  console.log('Filtraion de projets par categoryId:', categoryId);
+  const gallery = document.querySelector('.gallery');
+  if (gallery) {
+    gallery.innerHTML = '';
+    const filteredImages = projectsData.filter(project => {
+      return categoryId === 'all' || project.categoryId == categoryId;
+    });
+    filteredImages.forEach(project => {
+      const figure = document.createElement('figure');
+      const img = document.createElement('img');
+      img.src = project.imageUrl;
+      const figCaption = document.createElement('figcaption');
+      figCaption.textContent = project.title;
+      figure.appendChild(img);
+      figure.appendChild(figCaption);
+      gallery.appendChild(figure);
+      uniqueCategories.add(project.categoryId);
+    });
   } else {
-      console.error("Button with id 'btnAll' not found");
+    console.error("Elément Gallery n'est pas trouvé");
   }
+}
 
-  if (btnObjects) {
-      btnObjects.addEventListener("click", function() {
-          filterImages(1);
-          handleButtonClick(btnObjects, 1);
-      });
-  } else {
-      console.error("Button with id 'btnObjects' not found");
-  }
-
-  if (btnApartments) {
-      btnApartments.addEventListener("click", function() {
-          filterImages(2);
-          handleButtonClick(btnApartments, 2);
-      });
-  } else {
-      console.error("Button with id 'btnApartments' not found");
-  }
-
-  if (btnHotels) {
-      btnHotels.addEventListener("click", function() {
-          filterImages(3);
-          handleButtonClick(btnHotels, 3);
-      });
-  } else {
-      console.error("Button with id 'btnHotels' not found");
-  }
-});
-  function filterImages(categoryId) {
-      console.log('Filtering images by categoryId:', categoryId);
-      var gallery = document.querySelector('.gallery');
-      gallery.innerHTML = '';
-
-      var filteredImages = projectsData.filter(project => {
-          return categoryId === 'all' || project.categoryId === categoryId;
-      });
-
-      filteredImages.forEach(project => {
-          const figure = document.createElement('figure');
-
-          const img = document.createElement('img');
-          img.src = project.imageUrl;
-
-          const figCaption = document.createElement('figcaption');
-          figCaption.textContent = project.title;
-
-          figure.appendChild(img);
-          figure.appendChild(figCaption);
-
-          gallery.appendChild(figure);
-      });
-  }
-
+fetchData()
+  .then(() => {
+    initialize();
+    displayImages();
+  })
+  .catch(() => {
+    console.error("Impossible de charger les données depuis l'API.")
+  });
 
 // Fermer la 1ere fenêtre modale
 function closeModal() {
@@ -151,7 +154,18 @@ document.addEventListener('DOMContentLoaded', function () {
   const uploadButton = document.getElementById('uploadButton');
   const modalColumnWrapper = document.getElementById('modalColumnWrapper');
 
-
+  //login vers logout
+  const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
+  const loginItem = document.getElementById('login');
+  if (isAuthenticated) {
+    loginItem.innerHTML = '<a href="#">logout</a>';
+    loginItem.addEventListener('click', function () {
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('authenticated');
+      sessionStorage.removeItem('buttonChanged');
+      window.location.reload();
+    });
+  }
 
   //Bouton Ajouter photo 1 f modale
   uploadButton.addEventListener('click', function () {
@@ -189,30 +203,6 @@ document.addEventListener('DOMContentLoaded', function () {
     modifierButton.style.display = 'none';
   }
 
-  const gallery = document.querySelector('.gallery');
-
-  // Objet Set
-  const uniqueCategories = new Set();
-
-
-  //Création de la galerie 
-  projectsData.forEach(project => {
-    const figure = document.createElement('figure');
-
-    const img = document.createElement('img');
-    img.src = project.imageUrl;
-
-    const figCaption = document.createElement('figcaption');
-    figCaption.textContent = project.title;
-
-    figure.appendChild(img);
-    figure.appendChild(figCaption);
-    gallery.appendChild(figure);
-
-    uniqueCategories.add(project.categoryId);
-  });
-
-  filterImages('all');
 
   var modal = document.getElementById("modal");
 
