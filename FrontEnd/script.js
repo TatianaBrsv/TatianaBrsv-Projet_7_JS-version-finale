@@ -30,30 +30,70 @@ let projectsData = savedProjects ? JSON.parse(savedProjects) : [
   { id: 11, imageUrl: 'http://localhost:5678/images/hotel-first-arte-new-delhi1651287605585.png', title: 'Hotel First Arte - New Delhi', categoryId: '3' },
 ];
 
-function filterImages(categoryId) {
-  console.log('Filtering images by categoryId:', categoryId);
-  var gallery = document.querySelector('.gallery');
-  gallery.innerHTML = '';
+//Filtration des projets par catégorie choisie
+document.addEventListener("DOMContentLoaded", function () {
+  var btnAll = document.getElementById("btnAll");
+  var btnObjects = document.getElementById("btnObjects");
+  var btnApartments = document.getElementById("btnApartments");
+  var btnHotels = document.getElementById("btnHotels");
 
-  var filteredImages = projectsData.filter(project => {
-    return categoryId === 'all' || project.categoryId === categoryId;
-  });
+  if (btnAll) {
+      btnAll.addEventListener("click", function() {
+          filterImages('all');
+      });
+  } else {
+      console.error("Button with id 'btnAll' not found");
+  }
 
-  filteredImages.forEach(project => {
-    const figure = document.createElement('figure');
+  if (btnObjects) {
+      btnObjects.addEventListener("click", function() {
+          filterImages(1);
+      });
+  } else {
+      console.error("Button with id 'btnObjects' not found");
+  }
 
-    const img = document.createElement('img');
-    img.src = project.imageUrl;
+  if (btnApartments) {
+      btnApartments.addEventListener("click", function() {
+          filterImages(2);
+      });
+  } else {
+      console.error("Button with id 'btnApartments' not found");
+  }
 
-    const figCaption = document.createElement('figcaption');
-    figCaption.textContent = project.title;
+  if (btnHotels) {
+      btnHotels.addEventListener("click", function() {
+          filterImages(3);
+      });
+  } else {
+      console.error("Button with id 'btnHotels' not found");
+  }
+});
+  function filterImages(categoryId) {
+      console.log('Filtering images by categoryId:', categoryId);
+      var gallery = document.querySelector('.gallery');
+      gallery.innerHTML = '';
 
-    figure.appendChild(img);
-    figure.appendChild(figCaption);
+      var filteredImages = projectsData.filter(project => {
+          return categoryId === 'all' || project.categoryId === categoryId;
+      });
 
-    gallery.appendChild(figure);
-  });
-}
+      filteredImages.forEach(project => {
+          const figure = document.createElement('figure');
+
+          const img = document.createElement('img');
+          img.src = project.imageUrl;
+
+          const figCaption = document.createElement('figcaption');
+          figCaption.textContent = project.title;
+
+          figure.appendChild(img);
+          figure.appendChild(figCaption);
+
+          gallery.appendChild(figure);
+      });
+  }
+
 
 // Fermer la 1ere fenêtre modale
 function closeModal() {
