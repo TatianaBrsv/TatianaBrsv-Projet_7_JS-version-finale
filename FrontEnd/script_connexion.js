@@ -43,10 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     sessionStorage.setItem('token', data.token);
                     sessionStorage.setItem('authenticated', 'true');
 
-                    // Génération et déclenchement de l'événement 'loginSuccess'
-                    const event3 = new Event('loginSuccess');
-                    console.log('loginSuccess est généré');
-                    window.dispatchEvent(event3);
+                   
                     // Redirection vers la page 'index.html'
                     sessionStorage.setItem('buttonChanged', 'true');
                     window.location.href = 'index.html';

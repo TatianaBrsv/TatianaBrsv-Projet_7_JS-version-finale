@@ -36,8 +36,6 @@ function displayImages() {
       figure.appendChild(figCaption);
       gallery.appendChild(figure);
     });
-  } else {
-    console.error("Elément avec la classe 'gallery' n'est pas trouvé");
   }
 }
 // Objet Set
@@ -51,7 +49,6 @@ function initialize() {
   const btnHotels = document.getElementById("btnHotels");
 
   if (!btnAll || !btnObjects || !btnApartments || !btnHotels) {
-    console.error("One or more filter buttons are missing");
     return;
   }
 
@@ -100,7 +97,6 @@ function filterImages(categoryId) {
       uniqueCategories.add(project.categoryId);
     });
   } else {
-    console.error("Elément Gallery n'est pas trouvé");
   }
 }
 
@@ -154,9 +150,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const uploadButton = document.getElementById('uploadButton');
   const modalColumnWrapper = document.getElementById('modalColumnWrapper');
 
-  //login vers logout
+  //login vers logout et les boutons de filtres sont cachés en cas de la connexion
   const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
   const loginItem = document.getElementById('login');
+  const menuContainer = document.getElementById('menuContainer'); // Получаем контейнер меню фильтрации
+
   if (isAuthenticated) {
     loginItem.innerHTML = '<a href="#">logout</a>';
     loginItem.addEventListener('click', function () {
@@ -165,7 +163,15 @@ document.addEventListener('DOMContentLoaded', function () {
       sessionStorage.removeItem('buttonChanged');
       window.location.reload();
     });
+    if (menuContainer) {
+      menuContainer.style.display = 'none';
   }
+  }
+ 
+
+
+
+
 
   //Bouton Ajouter photo 1 f modale
   uploadButton.addEventListener('click', function () {
