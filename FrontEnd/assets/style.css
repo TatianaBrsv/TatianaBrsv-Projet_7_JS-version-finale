@@ -339,7 +339,10 @@ button:active {
 	background-color: #1D6154;
 	color: #FFFFFF;
 }
-
+button.active {
+	background-color: #1D6154;
+    color: #FFFFFF;
+}
 /* Lien "Modifier" pour ouvrir la fenetre modale */
 .js-modal {
 	color: rgba(0, 0, 0, 1);

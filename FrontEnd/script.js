@@ -37,9 +37,21 @@ document.addEventListener("DOMContentLoaded", function () {
   var btnApartments = document.getElementById("btnApartments");
   var btnHotels = document.getElementById("btnHotels");
 
+  function handleButtonClick(button, categoryId) {
+    // Удаление класса active у всех кнопок
+    [btnAll, btnObjects, btnApartments, btnHotels].forEach(btn => btn.classList.remove('active'));
+
+    // Добавление класса active к нажатой кнопке
+    button.classList.add('active');
+
+    // Фильтрация изображений по выбранной категории
+    filterImages(categoryId);
+}
+
   if (btnAll) {
       btnAll.addEventListener("click", function() {
           filterImages('all');
+          handleButtonClick(btnAll, 'all');
       });
   } else {
       console.error("Button with id 'btnAll' not found");
@@ -48,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (btnObjects) {
       btnObjects.addEventListener("click", function() {
           filterImages(1);
+          handleButtonClick(btnObjects, 1);
       });
   } else {
       console.error("Button with id 'btnObjects' not found");
@@ -56,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (btnApartments) {
       btnApartments.addEventListener("click", function() {
           filterImages(2);
+          handleButtonClick(btnApartments, 2);
       });
   } else {
       console.error("Button with id 'btnApartments' not found");
@@ -64,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (btnHotels) {
       btnHotels.addEventListener("click", function() {
           filterImages(3);
+          handleButtonClick(btnHotels, 3);
       });
   } else {
       console.error("Button with id 'btnHotels' not found");
