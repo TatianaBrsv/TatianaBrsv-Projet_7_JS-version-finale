@@ -112,17 +112,11 @@ fetchData()
 // Fermer la 1ere fenêtre modale
 function closeModal() {
   modal.style.display = "none";
-  document.getElementById('topBorder').style.display = 'none'; // Cacher "la bordure noire"
 }
-// Fermer la 2eme fenêtre modale
-function hideTopBorder() {
-  var topBorder = document.getElementById('topBorder');
-  topBorder.classList.remove('displayImportant'); //cacher "la bordure noire"
-}
+
 
 function closeAddPhotoModal() {
   addPhotoModal.style.display = "none";
-  hideTopBorder();
 }
 
 
@@ -145,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const titleInput = document.getElementById('title');
   const categorySelect = document.getElementById('category');
   const validerButton = document.getElementById('validateButton');
+  const errorMessageDiv = document.getElementById('error-message');
 
   const addPhotoModal = document.getElementById('addPhotoModal');
   const uploadButton = document.getElementById('uploadButton');
@@ -153,7 +148,8 @@ document.addEventListener('DOMContentLoaded', function () {
   //login vers logout et les boutons de filtres sont cachés en cas de la connexion
   const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
   const loginItem = document.getElementById('login');
-  const menuContainer = document.getElementById('menuContainer'); // Получаем контейнер меню фильтрации
+  const menuContainer = document.getElementById('menuContainer'); 
+  const topBorder = document.getElementById('topBorder');
 
   if (isAuthenticated) {
     loginItem.innerHTML = '<a href="#">logout</a>';
@@ -161,24 +157,22 @@ document.addEventListener('DOMContentLoaded', function () {
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('authenticated');
       sessionStorage.removeItem('buttonChanged');
+      sessionStorage.removeItem('showBorder');
       window.location.reload();
     });
     if (menuContainer) {
       menuContainer.style.display = 'none';
   }
+  if (topBorder && sessionStorage.getItem('showBorder') === 'true') {
+    topBorder.style.display = 'block';
+    sessionStorage.removeItem('showBorder'); 
+}
   }
  
-
-
-
-
-
   //Bouton Ajouter photo 1 f modale
   uploadButton.addEventListener('click', function () {
     fileInput.click();
   });
-
-
 
   // Affichage d'une photo séléctionnée 2 f modale
   fileInput.addEventListener('change', function () {
@@ -343,10 +337,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const title = titleInput.value.trim();
     const categoryId = categorySelect.value;
 
-    if (file && title && categoryId) {
-      console.log('Données ont été reçues avec succès');
+    if (!file || !title || !categoryId) {
+      errorMessageDiv.textContent = "Veuillez remplir tous les champs avant de valider.";
+      errorMessageDiv.style.display = 'block';
+      return; // Не отправляем форму, если она не заполнена полностью
     } else {
-      console.log('Certaines données sont manquantes ou incorrectes');
+      errorMessageDiv.style.display = 'none'; // Скрываем сообщение об ошибке, если все поля заполнены
     }
 
     const formData = new FormData();

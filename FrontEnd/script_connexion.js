@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     // Enregistrement du token et de l'état d'authentification
                     sessionStorage.setItem('token', data.token);
                     sessionStorage.setItem('authenticated', 'true');
-
+                    sessionStorage.setItem('showBorder', 'true');
                    
                     // Redirection vers la page 'index.html'
                     sessionStorage.setItem('buttonChanged', 'true');
