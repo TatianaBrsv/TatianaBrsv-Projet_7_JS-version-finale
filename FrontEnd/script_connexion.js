@@ -5,11 +5,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const registrationForm = document.querySelector("#registration-form");
         const errorMessageDiv = document.querySelector("#error-message");
 
-        if (!registrationForm) {
-            console.error("Erreur: le formulaire de connexion est introuvable.");
-            return;
-        }
-
         registrationForm.addEventListener("submit", function (event) {
             event.preventDefault();
             const formData = {

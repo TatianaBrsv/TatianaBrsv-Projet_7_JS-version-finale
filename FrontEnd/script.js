@@ -75,6 +75,15 @@ function initialize() {
     handleButtonClick(btnHotels, 3);
   });
 }
+fetchData()
+  .then(() => {
+    initialize();
+    displayImages();
+  })
+  .catch(() => {
+    console.error("Impossible de charger les données depuis l'API.")
+  });
+
 
 // Filration de projets
 function filterImages(categoryId) {
@@ -96,18 +105,10 @@ function filterImages(categoryId) {
       gallery.appendChild(figure);
       uniqueCategories.add(project.categoryId);
     });
-  } else {
   }
 }
 
-fetchData()
-  .then(() => {
-    initialize();
-    displayImages();
-  })
-  .catch(() => {
-    console.error("Impossible de charger les données depuis l'API.")
-  });
+
 
 // Fermer la 1ere fenêtre modale
 function closeModal() {
@@ -231,7 +232,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         figure.remove();
         projectsData.splice(index, 1);
-        localStorage.setItem('projectsData', JSON.stringify(projectsData));
         filterImages('all');
         displayModalGallery();
         console.log('Project deleted successfully');
@@ -350,7 +350,6 @@ document.addEventListener('DOMContentLoaded', function () {
     })
       .then(response => response.json())
       .then(data => {
-        ///
         console.log('Server response:', data);
         if (!data || !data.id || !data.imageUrl || !data.title || !data.categoryId) {
           console.error('Invalid response from server: Missing data fields');
@@ -368,7 +367,6 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         projectsData.push(newProject);
-        localStorage.setItem('projectsData', JSON.stringify(projectsData));
         filterImages('all');
         displayModalGallery();
 
