@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log('script a démarré')
 
-
     function ajoutListenerEnvoyerformulaire() {
         const registrationForm = document.querySelector("#registration-form");
         const errorMessageDiv = document.querySelector("#error-message");
@@ -43,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     sessionStorage.setItem('token', data.token);
                     sessionStorage.setItem('authenticated', 'true');
                     sessionStorage.setItem('showBorder', 'true');
-                   
+
                     // Redirection vers la page 'index.html'
                     sessionStorage.setItem('buttonChanged', 'true');
                     window.location.href = 'index.html';

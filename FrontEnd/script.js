@@ -114,11 +114,9 @@ function closeModal() {
   modal.style.display = "none";
 }
 
-
 function closeAddPhotoModal() {
   addPhotoModal.style.display = "none";
 }
-
 
 // Flèche arrière/2eme fenêtre modale
 function goBack() {
@@ -127,9 +125,7 @@ function goBack() {
   var modal = document.getElementById("modal");
   modal.style.display = "block";
   document.getElementById('topBorder').style.display = 'block';
-
 }
-
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -148,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
   //login vers logout et les boutons de filtres sont cachés en cas de la connexion
   const isAuthenticated = sessionStorage.getItem('authenticated') === 'true';
   const loginItem = document.getElementById('login');
-  const menuContainer = document.getElementById('menuContainer'); 
+  const menuContainer = document.getElementById('menuContainer');
   const topBorder = document.getElementById('topBorder');
 
   if (isAuthenticated) {
@@ -162,13 +158,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     if (menuContainer) {
       menuContainer.style.display = 'none';
+    }
+    if (topBorder && sessionStorage.getItem('showBorder') === 'true') {
+      topBorder.style.display = 'block';
+      sessionStorage.removeItem('showBorder');
+    }
   }
-  if (topBorder && sessionStorage.getItem('showBorder') === 'true') {
-    topBorder.style.display = 'block';
-    sessionStorage.removeItem('showBorder'); 
-}
-  }
- 
+
   //Bouton Ajouter photo 1 f modale
   uploadButton.addEventListener('click', function () {
     fileInput.click();
@@ -192,8 +188,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-
-
   // Le bouton Modifier est affiché en cas de la connexion//
   const modifierButton = document.querySelector('.js-modal');
 
@@ -202,7 +196,6 @@ document.addEventListener('DOMContentLoaded', function () {
   } else {
     modifierButton.style.display = 'none';
   }
-
 
   var modal = document.getElementById("modal");
 
@@ -262,7 +255,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-
   // 1ere Fenêtre modale 
   var btnModifier = document.querySelector(".js-modal");
   btnModifier.onclick = function (e) {
@@ -282,7 +274,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var topBorder = document.getElementById('topBorder'); // Afficher la bordure noire
     topBorder.classList.add('displayImportant');
-
 
     // Cacher la 1 fenêtre modale
     modal.style.display = "none";
@@ -320,7 +311,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
   }
-
 
   fileInput.addEventListener('change', toggleValiderButtonColor);
   titleInput.addEventListener('input', toggleValiderButtonColor);
@@ -364,12 +354,6 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('Server response:', data);
         if (!data || !data.id || !data.imageUrl || !data.title || !data.categoryId) {
           console.error('Invalid response from server: Missing data fields');
-          if (!data) console.error('No data received from server');
-          if (!data.id) console.error('Missing id');
-          if (!data.imageUrl) console.error('Missing imageUrl');
-          if (!data.title) console.error('Missing caption');
-          if (!data.categoryId) console.error('Missing category');
-          throw new Error('Invalid response from server');
         }
         alert("Nouveau projet a été ajouté");
         closeAddPhotoModal();
