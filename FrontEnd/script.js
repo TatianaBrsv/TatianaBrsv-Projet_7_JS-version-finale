@@ -219,7 +219,12 @@ document.addEventListener('DOMContentLoaded', function () {
       const deleteIcon = document.createElement('i');
       deleteIcon.className = 'fas fa-trash-alt delete-icon';
 
+      deleteIconContainer.appendChild(deleteIcon);
+      figure.appendChild(deleteIconContainer);
+      modalGallery.appendChild(figure);
+
       deleteIcon.addEventListener('click', async (event) => {
+        try {
         event.stopPropagation();
         const response = await fetch(`${apiUrl}/${project.id}`, {
           method: 'DELETE',
@@ -228,18 +233,17 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         });
         if (!response.ok) {
-          throw new Error('Failed to delete project on server');
+          throw new Error('Echec de la suppression du projet sur le serveur');
         }
         figure.remove();
         projectsData.splice(index, 1);
         filterImages('all');
         displayModalGallery();
-        console.log('Project deleted successfully');
+        console.log('Projet est supprimé avec succès');
+      } catch (error) {
+        console.error('Erreur lors de la suppresion du projet:', error);
+      }
       });
-
-      deleteIconContainer.appendChild(deleteIcon);
-      figure.appendChild(deleteIconContainer);
-      modalGallery.appendChild(figure);
     });
   }
 
