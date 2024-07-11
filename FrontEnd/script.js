@@ -334,9 +334,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!file || !title || !categoryId) {
       errorMessageDiv.textContent = "Veuillez remplir tous les champs avant de valider.";
       errorMessageDiv.style.display = 'block';
-      return; // Не отправляем форму, если она не заполнена полностью
+      return; 
     } else {
-      errorMessageDiv.style.display = 'none'; // Скрываем сообщение об ошибке, если все поля заполнены
+      errorMessageDiv.style.display = 'none';
     }
 
     const formData = new FormData();
@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function () {
           id: data.id,
           imageUrl: data.imageUrl,
           title: data.title,
-          categoryId: data.category
+          categoryId: data.categoryId
         };
 
         projectsData.push(newProject);
