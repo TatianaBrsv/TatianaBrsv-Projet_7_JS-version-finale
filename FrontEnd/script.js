@@ -20,6 +20,11 @@ function fetchData() {
       throw error;
     });
 }
+
+
+
+
+
 // Fonction pour afficher les projets
 function displayImages() {
   const gallery = document.querySelector('.gallery');
@@ -268,6 +273,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('topBorder').style.display = 'block'; // Afficher la bordure noire
   };
 
+  
   //Ouvrir la 2eme fenêtre modale
   var addPhotoBtn = document.querySelector("#modal-content input[type='submit']");
   addPhotoBtn.onclick = function (e) {
@@ -281,6 +287,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Cacher la 1 fenêtre modale
     modal.style.display = "none";
+
+    loadCategories();
   };
 
   // fermer la 2eme fenêtre modale en cliquant sur la croix
@@ -392,4 +400,30 @@ document.addEventListener('DOMContentLoaded', function () {
         console.error('Error uploading project:', error);
       });
   });
+
+  //Fonction pour récupérer les catégories
+  function loadCategories() {
+    fetch('http://localhost:5678/api/categories', { 
+        headers: {
+            'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data && Array.isArray(data)) {
+            categorySelect.innerHTML = '<option value=""></option>'; // Option par défaut
+            data.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                categorySelect.appendChild(option);
+            });
+        } else {
+            console.error('Données de catégorie invalides');
+        }
+    })
+    .catch(error => {
+        console.error('Erreur lors du chargement des catégories:', error);
+    });
+}
 });
